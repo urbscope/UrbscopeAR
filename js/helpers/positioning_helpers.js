@@ -41,47 +41,40 @@ const positioning_helpers = {
             transformBehaviors.transformBehaviors = this.state.shouldBillboard ? "billboardY" : [];
         }
 
-        const pos = [0, 0, 0];
-        const rot = [0, 0, 0];
-        this.setState(prevState=>({
-            markerPositions: [...prevState.markerPositions, pos],
-            markerRotations: [...prevState.markerRotations, rot],
-            modelArray : [...prevState.modelArray, (<ViroNode
-                    {...transformBehaviors}
-                    position={pos}
-                    ref={component=> this.arNodeRefs.push(component) }
-                    scale={[.2, .2, .2]}
-                    rotation={rot}
-                    key = {key++}>
+        this.modelArray.push((<ViroNode
+                {...transformBehaviors}
+                position={[0,0,0]}
+                ref={component=> this.arNodeRefs.push(component) }
+                scale={[.2, .2, .2]}
+                rotation={[0,0,0]}
+                key = {key++}>
 
 
-                    <ViroSpotLight
-                        innerAngle={5}
-                        outerAngle={20}
-                        direction={[0,-1,0]}
-                        position={[0, 4, 0]}
-                        color="#ffffff"
-                        castsShadow={true}
-                        shadowNearZ={.1}
-                        shadowFarZ={6}
-                        shadowOpacity={.9}/>
+                <ViroSpotLight
+                    innerAngle={5}
+                    outerAngle={20}
+                    direction={[0,-1,0]}
+                    position={[0, 4, 0]}
+                    color="#ffffff"
+                    castsShadow={true}
+                    shadowNearZ={.1}
+                    shadowFarZ={6}
+                    shadowOpacity={.9}/>
 
-                    <Viro3DObject
-                        position={[0, .5 , 0]}
-                        source={this.props.arSceneNavigator.viroAppProps.objectSource}
-                        type = "VRX" onLoadEnd={this._onLoadEnd} onLoadStart={this._onLoadStart} />
+                <Viro3DObject
+                    position={[0, .5 , 0]}
+                    source={this.props.arSceneNavigator.viroAppProps.objectSource}
+                    type = "VRX" onLoadEnd={this._onLoadEnd} onLoadStart={this._onLoadStart} />
 
-                    <ViroSurface
-                        rotation={[-90, 0, 0]}
-                        position={[0, -.001, 0]}
-                        width={2.5} height={2.5}
-                        arShadowReceiver={true}
-                        ignoreEventHandling={true} />
+                <ViroSurface
+                    rotation={[-90, 0, 0]}
+                    position={[0, -.001, 0]}
+                    width={2.5} height={2.5}
+                    arShadowReceiver={true}
+                    ignoreEventHandling={true} />
 
-                </ViroNode>
-            )]
-        }));
-
+            </ViroNode>)
+        );
 
     },
 
@@ -137,15 +130,9 @@ const positioning_helpers = {
     },
 
     _setInitialPlacement(position) {
-        let temp = this.state.markerPositions;
-        for (let i =0; i< position.length; i++){
-            temp[temp.length-1][i] = position[i]
-        }
-
-        this.setState(prevState =>({
-            //change last element in markerPositions
-            markerPositions: temp
-        }));
+        this.arNodeRefs[this.arNodeRefs.length-1].setNativeProps({
+           position
+        });
         setTimeout(this._updateInitialRotation, 200);
     },
 
@@ -163,9 +150,11 @@ const positioning_helpers = {
                 yRotation = 180 - (yRotation);
             }
 
+            this.arNodeRefs[this.arNodeRefs.length-1].setNativeProps({
+                rotation: [0,yRotation,0]
+            });
+
             this.setState(prevState=>({
-                //change last element in markerPositions
-                markerRotations: [...prevState.markerRotations.slice(0,-1), [0,yRotation,0]],
                 shouldBillboard : false,
             }));
         });

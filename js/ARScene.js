@@ -33,15 +33,12 @@ export default class ARScene extends Component {
     // Set initial state here
     this.state = {
         ARVisible: false,
-        markerPositions: [],
-        markerRotations: [],
         shouldBillboard : true,
-        modelArray: [],
     };
 
-    // //initialize AR modelArray and Node refs
-    //   //AR Nodes will be stored as elements in this array. Mutated using addARModeltoScene and displayed with getModel
-    // this.modelArray = [];
+    //initialize AR modelArray and Node refs
+    //AR Nodes will be stored as elements in this array. Mutated using addARModeltoScene and displayed with getModel
+    this.modelArray = [];
     this.arNodeRefs = [];
 
     // bind 'this' to functions
@@ -65,7 +62,7 @@ export default class ARScene extends Component {
           ref = {ref=>this.arScene= ref}>
 
           <ViroAmbientLight color="#ffffff" intensity={200}/>
-          {this.state.modelArray}
+          {this.modelArray}
 
       </ViroARScene>
     );
