@@ -57,7 +57,7 @@ export default class ARScene extends Component {
           ref = {ref=>this.arScene= ref}>
 
           <ViroAmbientLight color="#ffffff" intensity={200}/>
-          {renderIf(this.state.ARVisible, this._getModel())}
+          {this._getModel()}
 
       </ViroARScene>
     );
@@ -67,16 +67,18 @@ export default class ARScene extends Component {
     _onSceneClicked(){
         this.setState({
             ARVisible: false
-        });
-
-        this.props.arSceneNavigator.takeScreenshot("screenshot", true).then((res) => {
-            console.log(res.success);
-            console.log(res.url);
-        }).then(() => {
-            this.setState({
-                ARVisible: true,
+        },()=>{
+            this.props.arSceneNavigator.takeScreenshot("screenshot", true).then((res) => {
+                console.log(res.success);
+                console.log(res.url);
+            }).then(() => {
+                this.setState({
+                    ARVisible: true,
+                });
             });
         });
+
+
 
     }
 

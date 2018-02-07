@@ -26,6 +26,8 @@ import {
 } from 'react-viro';
 
 const positioning_helpers = {
+    modelArray: [],
+
     //modified getModel
     _getModel() {
 
@@ -40,6 +42,7 @@ const positioning_helpers = {
                 position={this.state.markerPosition}
                 ref={component=>this.arNodeRef = component}
                 scale={[.2, .2, .2]}
+                visible = {this.state.ARVisible}
                 rotation={this.state.markerRotation}>
 
 
