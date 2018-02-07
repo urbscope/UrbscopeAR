@@ -19,7 +19,8 @@ import {
     _onArHitTestResults,
     _setInitialPlacement,
     _updateInitialRotation,
-    _distance
+    _distance,
+    _addARModeltoScene
 } from './helpers/positioning_helpers';
 
 import renderIf from "./helpers/renderIf";
@@ -32,14 +33,21 @@ export default class ARScene extends Component {
     // Set initial state here
     this.state = {
         ARVisible: false,
-        markerPosition: [0, 0, 0],
-        markerRotation: [0,0,0],
+        markerPositions: [],
+        markerRotations: [],
         shouldBillboard : true,
+        modelArray: [],
     };
+
+    // //initialize AR modelArray and Node refs
+    //   //AR Nodes will be stored as elements in this array. Mutated using addARModeltoScene and displayed with getModel
+    // this.modelArray = [];
+    this.arNodeRefs = [];
 
     // bind 'this' to functions
     this._onSceneClicked = this._onSceneClicked.bind(this);
     this._getModel = _getModel.bind(this);
+    this._addARModeltoScene = _addARModeltoScene.bind(this);
     this._onLoadStart = _onLoadStart.bind(this);
     this._onLoadEnd = _onLoadEnd.bind(this);
     this._onArHitTestResults = _onArHitTestResults.bind(this);
@@ -57,7 +65,7 @@ export default class ARScene extends Component {
           ref = {ref=>this.arScene= ref}>
 
           <ViroAmbientLight color="#ffffff" intensity={200}/>
-          {this._getModel()}
+          {this.state.modelArray}
 
       </ViroARScene>
     );
@@ -72,6 +80,7 @@ export default class ARScene extends Component {
                 console.log(res.success);
                 console.log(res.url);
             }).then(() => {
+                this._addARModeltoScene();
                 this.setState({
                     ARVisible: true,
                 });

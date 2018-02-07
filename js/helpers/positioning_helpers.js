@@ -25,53 +25,64 @@ import {
     ViroNode,
 } from 'react-viro';
 
+let key = 0; //temporary quickfix for key problem
+
 const positioning_helpers = {
-    modelArray: [],
 
     //modified getModel
     _getModel() {
+        return this.modelArray;
+    },
+
+    _addARModeltoScene(){
 
         let transformBehaviors = {};
         if (this.state.shouldBillboard) {
             transformBehaviors.transformBehaviors = this.state.shouldBillboard ? "billboardY" : [];
         }
 
+        const pos = [0, 0, 0];
+        const rot = [0, 0, 0];
+        this.setState(prevState=>({
+            markerPositions: [...prevState.markerPositions, pos],
+            markerRotations: [...prevState.markerRotations, rot],
+            modelArray : [...prevState.modelArray, (<ViroNode
+                    {...transformBehaviors}
+                    position={pos}
+                    ref={component=> this.arNodeRefs.push(component) }
+                    scale={[.2, .2, .2]}
+                    rotation={rot}
+                    key = {key++}>
 
-        var modelArray = (<ViroNode
-                {...transformBehaviors}
-                position={this.state.markerPosition}
-                ref={component=>this.arNodeRef = component}
-                scale={[.2, .2, .2]}
-                visible = {this.state.ARVisible}
-                rotation={this.state.markerRotation}>
+
+                    <ViroSpotLight
+                        innerAngle={5}
+                        outerAngle={20}
+                        direction={[0,-1,0]}
+                        position={[0, 4, 0]}
+                        color="#ffffff"
+                        castsShadow={true}
+                        shadowNearZ={.1}
+                        shadowFarZ={6}
+                        shadowOpacity={.9}/>
+
+                    <Viro3DObject
+                        position={[0, .5 , 0]}
+                        source={this.props.arSceneNavigator.viroAppProps.objectSource}
+                        type = "VRX" onLoadEnd={this._onLoadEnd} onLoadStart={this._onLoadStart} />
+
+                    <ViroSurface
+                        rotation={[-90, 0, 0]}
+                        position={[0, -.001, 0]}
+                        width={2.5} height={2.5}
+                        arShadowReceiver={true}
+                        ignoreEventHandling={true} />
+
+                </ViroNode>
+            )]
+        }));
 
 
-                <ViroSpotLight
-                    innerAngle={5}
-                    outerAngle={20}
-                    direction={[0,-1,0]}
-                    position={[0, 4, 0]}
-                    color="#ffffff"
-                    castsShadow={true}
-                    shadowNearZ={.1}
-                    shadowFarZ={6}
-                    shadowOpacity={.9}/>
-
-                <Viro3DObject
-                    position={[0, .5 , 0]}
-                    source={this.props.arSceneNavigator.viroAppProps.objectSource}
-                    type = "VRX" onLoadEnd={this._onLoadEnd} onLoadStart={this._onLoadStart} />
-
-                <ViroSurface
-                    rotation={[-90, 0, 0]}
-                    position={[0, -.001, 0]}
-                    width={2.5} height={2.5}
-                    arShadowReceiver={true}
-                    ignoreEventHandling={true} />
-
-            </ViroNode>
-        );
-        return modelArray;
     },
 
     _onLoadStart() {
@@ -126,15 +137,21 @@ const positioning_helpers = {
     },
 
     _setInitialPlacement(position) {
-        this.setState({
-            markerPosition: position,
-        });
+        let temp = this.state.markerPositions;
+        for (let i =0; i< position.length; i++){
+            temp[temp.length-1][i] = position[i]
+        }
+
+        this.setState(prevState =>({
+            //change last element in markerPositions
+            markerPositions: temp
+        }));
         setTimeout(this._updateInitialRotation, 200);
     },
 
     // Update the rotation of the object to face the user after it's positioned.
     _updateInitialRotation() {
-        this.arNodeRef.getTransformAsync().then((retDict)=>{
+        this.arNodeRefs[this.arNodeRefs.length-1].getTransformAsync().then((retDict)=>{
             let rotation = retDict.rotation;
             let absX = Math.abs(rotation[0]);
             let absZ = Math.abs(rotation[2]);
@@ -146,10 +163,11 @@ const positioning_helpers = {
                 yRotation = 180 - (yRotation);
             }
 
-            this.setState({
-                markerRotation: [0,yRotation,0],
+            this.setState(prevState=>({
+                //change last element in markerPositions
+                markerRotations: [...prevState.markerRotations.slice(0,-1), [0,yRotation,0]],
                 shouldBillboard : false,
-            });
+            }));
         });
     },
 

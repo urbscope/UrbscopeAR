@@ -58471,7 +58471,7 @@ function _wrapComponent(id) {
     };
 }
 
-var InitialARScene = require(545                     ); // 545 = ./js/HelloWorldSceneAR
+var InitialARScene = require(545           ); // 545 = ./js/ARScene
 
 var objArray = [require(547                                   )]; // 547 = ./js/res/emoji_smile/emoji_smile.vrx
 
@@ -58507,8 +58507,7 @@ var Urbscope = _wrapComponent('Urbscope')(function (_Component) {
                     }
                 },
                 _react3.default.createElement(_reactViro.ViroARSceneNavigator, { style: localStyles.arView, apiKey: 'C934C47E-DF38-490B-AD3A-0288BC7C702B',
-                    initialScene: { scene: InitialARScene }, viroAppProps: this.state.viroAppProps,
-                    __source: {
+                    initialScene: { scene: InitialARScene }, viroAppProps: this.state.viroAppProps, __source: {
                         fileName: _jsxFileName,
                         lineNumber: 44
                     }
@@ -58518,12 +58517,12 @@ var Urbscope = _wrapComponent('Urbscope')(function (_Component) {
                     _reactNative.View,
                     { style: { position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 50
+                            lineNumber: 49
                         }
                     },
                     _react3.default.createElement(_reactNative.ActivityIndicator, { size: 'large', animating: this.state.isLoading, color: '#ffffff', __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 51
+                            lineNumber: 50
                         }
                     })
                 ))
@@ -58553,14 +58552,14 @@ var Urbscope = _wrapComponent('Urbscope')(function (_Component) {
                     _reactNative.View,
                     { style: { position: 'absolute', backgroundColor: "#ffffff22", left: 30, right: 30, top: 30, alignItems: 'center' }, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 77
+                            lineNumber: 76
                         }
                     },
                     _react3.default.createElement(
                         _reactNative.Text,
                         { style: { fontSize: 12, color: "#ffffff" }, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 78
+                                lineNumber: 77
                             }
                         },
                         'Waiting for tracking to initialize.'
@@ -67079,7 +67078,7 @@ function renderIf(condition, content) {
     }
 }
 }, 544, null, "Urbscope/js/helpers/renderIf.js");
-__d(/* Urbscope/js/HelloWorldSceneAR.js */function(global, require, module, exports) {'use strict';
+__d(/* Urbscope/js/ARScene.js */function(global, require, module, exports) {'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -67093,7 +67092,7 @@ var _index = require(160                                                 ); // 1
 
 var _index2 = _interopRequireDefault(_index);
 
-var _jsxFileName = 'C:\\Users\\Wall-E\\Documents\\React\\ViroAR\\Urbscope\\js\\HelloWorldSceneAR.js';
+var _jsxFileName = 'C:\\Users\\Wall-E\\Documents\\React\\ViroAR\\Urbscope\\js\\ARScene.js';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -67116,13 +67115,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _components = {
-    HelloWorldSceneAR: {
-        displayName: 'HelloWorldSceneAR'
+    ARScene: {
+        displayName: 'ARScene'
     }
 };
 
 var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
-    filename: 'C:/Users/Wall-E/Documents/React/ViroAR/Urbscope/js/HelloWorldSceneAR.js',
+    filename: 'C:/Users/Wall-E/Documents/React/ViroAR/Urbscope/js/ARScene.js',
     components: _components,
     locals: [module],
     imports: [_react3.default]
@@ -67134,23 +67133,27 @@ function _wrapComponent(id) {
     };
 }
 
-var HelloWorldSceneAR = _wrapComponent('HelloWorldSceneAR')(function (_Component) {
-    _inherits(HelloWorldSceneAR, _Component);
+var ARScene = _wrapComponent('ARScene')(function (_Component) {
+    _inherits(ARScene, _Component);
 
-    function HelloWorldSceneAR() {
-        _classCallCheck(this, HelloWorldSceneAR);
+    function ARScene() {
+        _classCallCheck(this, ARScene);
 
-        var _this = _possibleConstructorReturn(this, (HelloWorldSceneAR.__proto__ || Object.getPrototypeOf(HelloWorldSceneAR)).call(this));
+        var _this = _possibleConstructorReturn(this, (ARScene.__proto__ || Object.getPrototypeOf(ARScene)).call(this));
 
         _this.state = {
             ARVisible: false,
-            markerPosition: [0, 0, 0],
-            markerRotation: [0, 0, 0],
-            shouldBillboard: true
+            markerPositions: [],
+            markerRotations: [],
+            shouldBillboard: true,
+            modelArray: []
         };
+
+        _this.arNodeRefs = [];
 
         _this._onSceneClicked = _this._onSceneClicked.bind(_this);
         _this._getModel = _positioning_helpers._getModel.bind(_this);
+        _this._addARModeltoScene = _positioning_helpers._addARModeltoScene.bind(_this);
         _this._onLoadStart = _positioning_helpers._onLoadStart.bind(_this);
         _this._onLoadEnd = _positioning_helpers._onLoadEnd.bind(_this);
         _this._onArHitTestResults = _positioning_helpers._onArHitTestResults.bind(_this);
@@ -67161,7 +67164,7 @@ var HelloWorldSceneAR = _wrapComponent('HelloWorldSceneAR')(function (_Component
         return _this;
     }
 
-    _createClass(HelloWorldSceneAR, [{
+    _createClass(ARScene, [{
         key: 'render',
         value: function render() {
             var _this2 = this;
@@ -67175,15 +67178,15 @@ var HelloWorldSceneAR = _wrapComponent('HelloWorldSceneAR')(function (_Component
                         return _this2.arScene = _ref;
                     }, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 54
+                        lineNumber: 62
                     }
                 },
                 _react3.default.createElement(_reactViro.ViroAmbientLight, { color: '#ffffff', intensity: 200, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 59
+                        lineNumber: 67
                     }
                 }),
-                (0, _renderIf2.default)(this.state.ARVisible, this._getModel())
+                this.state.modelArray
             );
         }
     }, {
@@ -67193,27 +67196,28 @@ var HelloWorldSceneAR = _wrapComponent('HelloWorldSceneAR')(function (_Component
 
             this.setState({
                 ARVisible: false
-            });
-
-            this.props.arSceneNavigator.takeScreenshot("screenshot", true).then(function (res) {
-                console.log(res.success);
-                console.log(res.url);
-            }).then(function () {
-                _this3.setState({
-                    ARVisible: true
+            }, function () {
+                _this3.props.arSceneNavigator.takeScreenshot("screenshot", true).then(function (res) {
+                    console.log(res.success);
+                    console.log(res.url);
+                }).then(function () {
+                    _this3._addARModeltoScene();
+                    _this3.setState({
+                        ARVisible: true
+                    });
                 });
             });
         }
     }]);
 
-    return HelloWorldSceneAR;
+    return ARScene;
 }(_react2.Component));
 
-exports.default = HelloWorldSceneAR;
+exports.default = ARScene;
 
 
-module.exports = HelloWorldSceneAR;
-}, 545, null, "Urbscope/js/HelloWorldSceneAR.js");
+module.exports = ARScene;
+}, 545, null, "Urbscope/js/ARScene.js");
 __d(/* Urbscope/js/helpers/positioning_helpers.js */function(global, require, module, exports) {
 
 'use strict';
@@ -67230,8 +67234,15 @@ var _reactViro = require(492         ); // 492 = react-viro
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var key = 0;
+
 var positioning_helpers = {
     _getModel: function _getModel() {
+        return this.modelArray;
+    },
+    _addARModeltoScene: function _addARModeltoScene() {
         var _this = this;
 
         var transformBehaviors = {};
@@ -67239,53 +67250,61 @@ var positioning_helpers = {
             transformBehaviors.transformBehaviors = this.state.shouldBillboard ? "billboardY" : [];
         }
 
-        var modelArray = _react2.default.createElement(
-            _reactViro.ViroNode,
-            _extends({}, transformBehaviors, {
-                position: this.state.markerPosition,
-                ref: function ref(component) {
-                    return _this.arNodeRef = component;
-                },
-                scale: [.2, .2, .2],
-                rotation: this.state.markerRotation, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 38
-                }
-            }),
-            _react2.default.createElement(_reactViro.ViroSpotLight, {
-                innerAngle: 5,
-                outerAngle: 20,
-                direction: [0, -1, 0],
-                position: [0, 4, 0],
-                color: '#ffffff',
-                castsShadow: true,
-                shadowNearZ: .1,
-                shadowFarZ: 6,
-                shadowOpacity: .9, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 46
-                }
-            }),
-            _react2.default.createElement(_reactViro.Viro3DObject, {
-                position: [0, .5, 0],
-                source: this.props.arSceneNavigator.viroAppProps.objectSource,
-                type: 'VRX', onLoadEnd: this._onLoadEnd, onLoadStart: this._onLoadStart, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 57
-                }
-            }),
-            _react2.default.createElement(_reactViro.ViroSurface, {
-                rotation: [-90, 0, 0],
-                position: [0, -.001, 0],
-                width: 2.5, height: 2.5,
-                arShadowReceiver: true,
-                ignoreEventHandling: true, __source: {
-                    fileName: _jsxFileName,
-                    lineNumber: 62
-                }
-            })
-        );
-        return modelArray;
+        var pos = [0, 0, 0];
+        var rot = [0, 0, 0];
+        this.setState(function (prevState) {
+            return {
+                markerPositions: [].concat(_toConsumableArray(prevState.markerPositions), [pos]),
+                markerRotations: [].concat(_toConsumableArray(prevState.markerRotations), [rot]),
+                modelArray: [].concat(_toConsumableArray(prevState.modelArray), [_react2.default.createElement(
+                    _reactViro.ViroNode,
+                    _extends({}, transformBehaviors, {
+                        position: pos,
+                        ref: function ref(component) {
+                            return _this.arNodeRefs.push(component);
+                        },
+                        scale: [.2, .2, .2],
+                        rotation: rot,
+                        key: key++, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 49
+                        }
+                    }),
+                    _react2.default.createElement(_reactViro.ViroSpotLight, {
+                        innerAngle: 5,
+                        outerAngle: 20,
+                        direction: [0, -1, 0],
+                        position: [0, 4, 0],
+                        color: '#ffffff',
+                        castsShadow: true,
+                        shadowNearZ: .1,
+                        shadowFarZ: 6,
+                        shadowOpacity: .9, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 58
+                        }
+                    }),
+                    _react2.default.createElement(_reactViro.Viro3DObject, {
+                        position: [0, .5, 0],
+                        source: _this.props.arSceneNavigator.viroAppProps.objectSource,
+                        type: 'VRX', onLoadEnd: _this._onLoadEnd, onLoadStart: _this._onLoadStart, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 69
+                        }
+                    }),
+                    _react2.default.createElement(_reactViro.ViroSurface, {
+                        rotation: [-90, 0, 0],
+                        position: [0, -.001, 0],
+                        width: 2.5, height: 2.5,
+                        arShadowReceiver: true,
+                        ignoreEventHandling: true, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 74
+                        }
+                    })
+                )])
+            };
+        });
     },
     _onLoadStart: function _onLoadStart() {
         this.setState({
@@ -67332,15 +67351,22 @@ var positioning_helpers = {
         this._setInitialPlacement(newPosition);
     },
     _setInitialPlacement: function _setInitialPlacement(position) {
-        this.setState({
-            markerPosition: position
+        var temp = this.state.markerPositions;
+        for (var i = 0; i < position.length; i++) {
+            temp[temp.length - 1][i] = position[i];
+        }
+
+        this.setState(function (prevState) {
+            return {
+                markerPositions: temp
+            };
         });
         setTimeout(this._updateInitialRotation, 200);
     },
     _updateInitialRotation: function _updateInitialRotation() {
         var _this3 = this;
 
-        this.arNodeRef.getTransformAsync().then(function (retDict) {
+        this.arNodeRefs[this.arNodeRefs.length - 1].getTransformAsync().then(function (retDict) {
             var rotation = retDict.rotation;
             var absX = Math.abs(rotation[0]);
             var absZ = Math.abs(rotation[2]);
@@ -67351,9 +67377,11 @@ var positioning_helpers = {
                 yRotation = 180 - yRotation;
             }
 
-            _this3.setState({
-                markerRotation: [0, yRotation, 0],
-                shouldBillboard: false
+            _this3.setState(function (prevState) {
+                return {
+                    markerRotations: [].concat(_toConsumableArray(prevState.markerRotations.slice(0, -1)), [[0, yRotation, 0]]),
+                    shouldBillboard: false
+                };
             });
         });
     },
